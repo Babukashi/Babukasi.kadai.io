@@ -1,80 +1,75 @@
 // DenoのHTTPサーバーをインポート
-// DenoはES ModulesのURLインポートに対応しています
-import { serve } from 'https://deno.land/std@0.207.0/http/server.js';
+import { serve } from 'https://deno.land/std@0.207.0/http/server.ts';
+// ファイルシステム操作のためのモジュールをインポート
+import { extname } from 'https://deno.land/std/path/mod.ts';
+import { exists } from 'https://deno.land/std/fs/mod.ts';
 
-// ユーザーデータを模倣した簡易データベース
+// ユーザーデータを模倣した簡易データベース（変更なし）
 const MOCK_USERS = [
   { id: 'denouser', passwordHash: 'password1234', name: 'Deno 太郎' },
   { id: 'testuser', passwordHash: 'securepass', name: 'テスト ユーザー' }
 ];
 
-/**
- * ログイン処理を行う関数
- * @param {Request} request HTTPリクエストオブジェクト
- * @returns {Promise<Response>} HTTPレスポンス
- */
+// ... (handleLogin 関数は変更なし) ...
 async function handleLogin(request) {
-  try {
-    // 1. リクエストボディのJSONを解析
-    const { id, password } = await request.json();
+  // ... (前述の handleLogin 関数の中身) ...
+}
 
-    // IDとパスワードが提供されているかチェック
-    if (!id || !password) {
-      return new Response(JSON.stringify({ message: 'IDとパスワードを入力してください' }), {
-        status: 400,
-        headers: { 'Content-Type': 'application/json' }
-      });
-    }
-
-    // 2. データベース（モック）でユーザーを検索し、認証
-    const user = MOCK_USERS.find((u) => u.id === id);
-
-    // ユーザーが存在しない、またはパスワードが一致しない場合
-    if (!user || user.passwordHash !== password) {
-      return new Response(JSON.stringify({ message: 'IDまたはパスワードが一致しません' }), {
-        status: 401,
-        headers: { 'Content-Type': 'application/json' }
-      });
-    }
-
-    // 3. 認証成功
-    const responseBody = JSON.stringify({
-      message: 'ログインに成功しました',
-      token: 'dummy_jwt_token_12345', // ダミーのトークン
-      userName: user.name
-    });
-
-    // 成功（200 OK）レスポンスを返す
-    return new Response(responseBody, {
-      status: 200,
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    });
-  } catch (error) {
-    console.error('ログイン処理エラー:', error);
-    // JSONパース失敗など、サーバー側のエラー
-    return new Response(JSON.stringify({ message: 'サーバーエラーが発生しました' }), {
-      status: 500,
-      headers: { 'Content-Type': 'application/json' }
-    });
+/**
+ * ファイルのMIMEタイプを返すヘルパー関数
+ */
+function getMimeType(filePath) {
+  const extension = extname(filePath);
+  switch (extension) {
+    case '.html':
+      return 'text/html';
+    case '.css':
+      return 'text/css';
+    case '.js':
+      return 'text/javascript';
+    default:
+      return 'application/octet-stream';
   }
 }
 
 /**
- * メインのルーティング処理
+ * メインのルーティング処理 (静的ファイル提供機能を追加)
  * @param {Request} request HTTPリクエストオブジェクト
  * @returns {Response | Promise<Response>} HTTPレスポンス
  */
-function handler(request) {
+async function handler(request) {
   const url = new URL(request.url);
+  const pathname = url.pathname; // 1. /api/login パスへの POST リクエストを処理
 
-  // /api/login パスへの POST リクエストを処理 (ルーティング)
-  if (url.pathname === '/api/login' && request.method === 'POST') {
+  if (pathname === '/api/login' && request.method === 'POST') {
     return handleLogin(request);
-  }
+  } // 2. 静的ファイル (HTML, CSS, JS) の GET リクエストを処理
 
-  // 他のパスやメソッドは「見つからない」として処理
+  if (request.method === 'GET') {
+    // ルートパス ("/") の場合は index.html を返す
+    let filePath = pathname === '/' ? './index.html' : `./${pathname}`;
+
+    // パスがファイルとして存在するかチェック
+    if (await exists(filePath)) {
+      try {
+        // ファイルを読み込む
+        const fileContent = await Deno.readFile(filePath);
+        const mimeType = getMimeType(filePath);
+
+        // ファイル内容を返す (200 OK)
+        return new Response(fileContent, {
+          status: 200,
+          headers: {
+            'Content-Type': mimeType
+          }
+        });
+      } catch (e) {
+        console.error('ファイル読み込みエラー:', e);
+        return new Response('Internal Server Error', { status: 500 });
+      }
+    }
+  } // 3. どちらにも該当しない場合は Not Found
+
   return new Response('Not Found', { status: 404 });
 }
 
