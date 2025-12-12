@@ -1,6 +1,6 @@
 // DenoのHTTPサーバーをインポート
 // DenoはES ModulesのURLインポートに対応しています
-import { serve } from 'https://deno.land/std@0.207.0/http/server.ts';
+import { serve } from 'https://deno.land/std@0.207.0/http/server.js';
 
 // ユーザーデータを模倣した簡易データベース
 const MOCK_USERS = [
