@@ -47,7 +47,7 @@ async function handler(request) {
 
   if (request.method === 'GET') {
     // ルートパス ("/") の場合は index.html を返す
-    let filePath = pathname === '/' ? './index.html' : `./${pathname}`;
+    let filePath = pathname === '/' ? './login.html' : `./${pathname}`;
 
     // パスがファイルとして存在するかチェック
     if (await exists(filePath)) {
@@ -76,4 +76,4 @@ async function handler(request) {
 // サーバー起動
 const port = 8000;
 console.log(`サーバーは http://localhost:${port} で動作中です`);
-serve(handler, { port });
+serve(handler, { port, hostname: '0.0.0.0' });
