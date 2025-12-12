@@ -1,5 +1,5 @@
 // DenoのHTTPサーバーをインポート
-import { serve } from 'https://deno.land/std@0.207.0/http/server.ts';
+import { serve } from 'https://deno.land/std@0.207.0/http/server.js';
 // ファイルシステム操作のためのモジュールをインポート
 import { extname } from 'https://deno.land/std/path/mod.ts';
 import { exists } from 'https://deno.land/std/fs/mod.ts';
