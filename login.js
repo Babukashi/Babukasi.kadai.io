@@ -39,7 +39,7 @@ document.getElementById('login-form').addEventListener('submit', function (event
       // ログイン成功時の処理
       // サーバーから認証トークンなどを受け取った後、ホーム画面に遷移
       console.log('ログイン成功:', data);
-      window.location.href = '/home.html'; // ホーム画面のパス
+      window.location.href = 'index.html'; // ホーム画面のパス
     })
     .catch((error) => {
       // ログイン失敗時の処理（サーバーが返すエラーコードを表示）
