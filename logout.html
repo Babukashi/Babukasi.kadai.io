@@ -3,19 +3,14 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ログアウト</title>
-    <link rel="stylesheet" href="signup.css" />
+    <title>ログアウト - ブックマーク共有アプリ</title>
+    <link rel="stylesheet" href="logout.css" />
   </head>
   <body>
-    <div class="finish-container">
-      <h1 class="finish-message">ログアウトしました</h1>
-      <button id="back-to-login" class="login-button">ログイン</button>
+    <div class="logout-container">
+      <h1>ログアウトしました</h1>
+      <button id="relogin-button" class="round-button">再ログイン</button>
     </div>
-    <script>
-      // ログイン画面に戻る処理
-      document.getElementById('back-to-login').addEventListener('click', () => {
-        window.location.href = '/login.html';
-      });
-    </script>
+    <script src="logout.js"></script>
   </body>
 </html>
