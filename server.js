@@ -84,3 +84,5 @@ async function handler(request) {
 
 console.log(`サーバー起動: http://localhost:8000`);
 serve(handler, { port: 8000, hostname: '0.0.0.0' });
+
+// To run this server, use the command: deno run --allow-net --allow-read server.js
