@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>登録完了</title>
+    <link rel="stylesheet" href="signup.css" />
+  </head>
+  <body>
+    <div class="finish-container">
+      <h1 class="finish-message">登録が完了しました！</h1>
+      <button id="back-to-login" class="login-button">ログイン</button>
+    </div>
+    <script>
+      // ログイン画面に戻る処理
+      document.getElementById('back-to-login').addEventListener('click', () => {
+        window.location.href = '/login.html';
+      });
+    </script>
+  </body>
+</html>

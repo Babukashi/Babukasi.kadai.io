@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ブックマーク共有アプリ - 新規登録</title>
+    <link rel="stylesheet" href="signup.css" />
+  </head>
+  <body>
+    <div class="signup-container">
+      <h1>新規登録</h1>
+      <form id="signup-form">
+        <div class="input-group">
+          <label for="user-id">ID</label>
+          <input type="text" id="user-id" name="id" required placeholder="IDを入力してください" />
+        </div>
+        <div class="input-group">
+          <label for="password">パスワード</label>
+          <input type="password" id="password" name="password" required placeholder="パスワードを入力してください" />
+        </div>
+        <p id="error-message" class="error-message"></p>
+        <button type="submit" class="signup-button">新規登録</button>
+      </form>
+    </div>
+    <script src="signup.js"></script>
+  </body>
+</html>
