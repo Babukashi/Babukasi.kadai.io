@@ -1,0 +1,41 @@
+body {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  background-color: #ffffff;
+}
+
+.home-container {
+  text-align: center;
+  width: 300px;
+}
+
+h1 {
+  font-size: 3rem;
+  margin-bottom: 60px;
+  font-weight: normal;
+}
+
+.button-group {
+  display: flex;
+  flex-direction: column;
+  gap: 25px; /* ボタン同士の間隔 */
+}
+
+.menu-button {
+  width: 100%;
+  padding: 12px 0;
+  font-size: 1rem;
+  background-color: #fff;
+  border: 2px solid #000;
+  border-radius: 30px; /* カプセル型のボタン */
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.menu-button:hover {
+  background-color: #f5f5f5;
+}

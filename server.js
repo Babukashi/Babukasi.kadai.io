@@ -1,31 +1,22 @@
 // server.js
-// DenoのHTTPサーバーと、ファイル操作、パス操作のためのモジュールをインポート
+// Denoの標準ライブラリから必要なモジュールをインポート
 import { serve } from 'https://deno.land/std@0.207.0/http/server.ts';
 import { extname } from 'https://deno.land/std/path/mod.ts';
 import { exists } from 'https://deno.land/std/fs/mod.ts';
 
-// ユーザーデータを管理する簡易的なデータベース（メモリ上の配列）
+// ユーザーデータを管理する簡易データベース（メモリ上の配列）
 const MOCK_USERS = [
   { id: 'denouser', passwordHash: 'password1234', name: 'Deno 太郎' },
   { id: 'testuser', passwordHash: 'securepass', name: 'テスト ユーザー' }
 ];
 
 /**
- * 1. ログイン処理を行う関数
+ * 1. ログイン処理 (POST /api/login)
  */
 async function handleLogin(request) {
   try {
     const { id, password } = await request.json();
 
-    // IDとパスワードの入力チェック
-    if (!id || !password) {
-      return new Response(JSON.stringify({ message: 'IDとパスワードを入力してください' }), {
-        status: 400,
-        headers: { 'Content-Type': 'application/json' }
-      });
-    }
-
-    // ユーザーの照合
     const user = MOCK_USERS.find((u) => u.id === id);
     if (!user || user.passwordHash !== password) {
       return new Response(JSON.stringify({ message: 'IDまたはパスワードが一致しません' }), {
@@ -34,11 +25,9 @@ async function handleLogin(request) {
       });
     }
 
-    // 認証成功
     return new Response(
       JSON.stringify({
-        message: 'ログインに成功しました',
-        token: 'dummy_token',
+        message: 'ログイン成功',
         userName: user.name
       }),
       {
@@ -47,18 +36,17 @@ async function handleLogin(request) {
       }
     );
   } catch (error) {
-    return new Response(JSON.stringify({ message: 'サーバーエラーが発生しました' }), { status: 500 });
+    return new Response(JSON.stringify({ message: 'サーバーエラー' }), { status: 500 });
   }
 }
 
 /**
- * 2. 新規登録処理を行う関数
+ * 2. 新規登録処理 (POST /api/signup)
  */
 async function handleSignup(request) {
   try {
     const { id, password } = await request.json();
 
-    // 既に存在するIDかチェック
     if (MOCK_USERS.find((u) => u.id === id)) {
       return new Response(JSON.stringify({ message: 'そのIDは既に使用されています' }), {
         status: 400,
@@ -66,10 +54,7 @@ async function handleSignup(request) {
       });
     }
 
-    // 新しいユーザーを追加
-    MOCK_USERS.push({ id: id, passwordHash: password, name: `${id} さん` });
-    console.log(`新規登録成功: ${id}`);
-
+    MOCK_USERS.push({ id, passwordHash: password, name: `${id} さん` });
     return new Response(JSON.stringify({ message: '登録成功' }), {
       status: 200,
       headers: { 'Content-Type': 'application/json' }
@@ -80,7 +65,7 @@ async function handleSignup(request) {
 }
 
 /**
- * ファイルの拡張子からMIMEタイプを判定するヘルパー関数
+ * ファイル拡張子からMIMEタイプを判定するヘルパー関数
  */
 function getMimeType(filePath) {
   const extension = extname(filePath);
@@ -91,6 +76,8 @@ function getMimeType(filePath) {
       return 'text/css';
     case '.js':
       return 'text/javascript';
+    case '.png':
+      return 'image/png';
     default:
       return 'application/octet-stream';
   }
@@ -103,17 +90,15 @@ async function handler(request) {
   const url = new URL(request.url);
   const pathname = url.pathname;
 
-  // --- APIリクエスト (POST) のルーティング ---
-  if (pathname === '/api/login' && request.method === 'POST') {
-    return handleLogin(request);
-  }
-  if (pathname === '/api/signup' && request.method === 'POST') {
-    return handleSignup(request);
+  // --- API ルーティング (POST) ---
+  if (request.method === 'POST') {
+    if (pathname === '/api/login') return handleLogin(request);
+    if (pathname === '/api/signup') return handleSignup(request);
   }
 
-  // --- 静的ファイル (GET) のルーティング ---
+  // --- 静的ファイル提供 (GET) ---
   if (request.method === 'GET') {
-    // ルートパス ("/") にアクセスされた場合は login.html を表示する
+    // 【重要】ルートパス ("/") アクセス時は login.html を返す
     let filePath = pathname === '/' ? './login.html' : `./${pathname}`;
 
     if (await exists(filePath)) {
@@ -130,11 +115,10 @@ async function handler(request) {
     }
   }
 
-  // 該当なし
   return new Response('Not Found', { status: 404 });
 }
 
-// サーバー起動設定
+// サーバー起動
 const port = 8000;
 console.log(`サーバーは http://localhost:${port} で動作中です`);
 serve(handler, { port, hostname: '0.0.0.0' });
