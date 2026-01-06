@@ -1,11 +1,13 @@
+/* touroku.css */
 body {
   font-family: 'Helvetica Neue', Arial, sans-serif;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
+  align-items: center; /* 画面全体の中央寄せ */
+  justify-content: flex-start;
+  min-height: 100vh;
   margin: 0;
+  padding-top: 60px; /* 上に少し余白 */
   position: relative;
 }
 
@@ -22,10 +24,19 @@ body {
   font-size: 1.1rem;
 }
 
+/* コンテナ自体を中央寄せにする設定 */
+.registration-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* これで子要素（h1, form-box, button）が中央になります */
+  width: 100%;
+}
+
 h1 {
   font-size: 3rem;
   margin-bottom: 20px;
   font-weight: normal;
+  text-align: center;
 }
 
 /* フォームを囲む太い枠 */
@@ -35,13 +46,13 @@ h1 {
   padding: 40px;
   width: 600px;
   background: #fff;
+  box-sizing: border-box; /* 幅の計算を正確にする */
 }
 
 .input-group {
   margin-bottom: 30px;
   text-align: left;
 }
-
 label {
   display: block;
   font-size: 1.5rem;
@@ -51,21 +62,28 @@ label {
 input {
   width: 100%;
   border: none;
-  border-bottom: 2px solid #000; /* 下線のみ */
+  border-bottom: 2px solid #000;
   font-size: 1.2rem;
   padding: 10px 0;
   outline: none;
+  background: transparent;
 }
 
-/* 登録ボタン */
+/* 下の登録/編集ボタン（ここを中央固定にする） */
 .submit-button {
   margin-top: 30px;
-  padding: 10px 80px;
+  padding: 12px 80px;
   border: 2px solid #000;
   border-radius: 30px;
   background: #fff;
   font-size: 1.2rem;
   cursor: pointer;
+  display: block; /* ブロック要素化 */
+  transition: background 0.2s;
+}
+
+.submit-button:hover {
+  background: #f0f0f0;
 }
 
 .error-text {
