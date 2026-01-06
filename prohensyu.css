@@ -1,0 +1,21 @@
+.styled-select {
+  width: 100%;
+  padding: 10px;
+  font-size: 1.2rem;
+  border: none;
+  border-bottom: 2px solid #000;
+  background: transparent;
+  outline: none;
+}
+.change-sub-btn {
+  margin-top: 10px;
+  padding: 5px 20px;
+  border: 2px solid #000;
+  border-radius: 15px;
+  background: #fff;
+  cursor: pointer;
+}
+.center-btn {
+  display: block;
+  margin: 30px auto;
+}

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>登録 - ブックマーク共有アプリ</title>
+    <link rel="stylesheet" href="touroku.css" />
+  </head>
+  <body>
+    <button id="back-home" class="back-button">戻る</button>
+
+    <div class="registration-container">
+      <h1>登録</h1>
+
+      <div class="form-box">
+        <div class="input-group">
+          <label>URL</label>
+          <input type="text" id="bm-url" placeholder="https://..." />
+        </div>
+
+        <div class="input-group">
+          <label>タイトル</label>
+          <input type="text" id="bm-title" placeholder="タイトルを入力" />
+          <p id="title-error" class="error-text"></p>
+        </div>
+
+        <div class="input-group">
+          <label>メモ</label>
+          <input type="text" id="bm-memo" placeholder="（任意）" />
+        </div>
+      </div>
+
+      <button id="submit-bookmark" class="submit-button">登録</button>
+    </div>
+
+    <script src="touroku.js"></script>
+  </body>
+</html>

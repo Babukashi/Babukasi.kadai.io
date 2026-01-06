@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <title>プロフィール編集</title>
+    <link rel="stylesheet" href="touroku.css" />
+    <link rel="stylesheet" href="prohensyu.css" />
+  </head>
+  <body>
+    <button id="btn-back" class="back-button">戻る</button>
+    <div class="registration-container">
+      <div class="form-box">
+        <div class="input-group"><label>名前</label><input type="text" id="edit-name" /></div>
+        <div class="input-group">
+          <label>職業</label>
+          <select id="edit-job" class="styled-select">
+            <option value="高校生">高校生</option>
+            <option value="大学生">大学生</option>
+            <option value="社会人">社会人</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label>性別</label>
+          <select id="edit-gender" class="styled-select">
+            <option value="男">男</option>
+            <option value="女">女</option>
+            <option value="回答しない">回答しない</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label>ID・パスワードの変更</label>
+          <button id="btn-go-idpass" class="change-sub-btn">変更する</button>
+        </div>
+      </div>
+      <button id="btn-save" class="submit-button center-btn">決定</button>
+    </div>
+    <script src="prohensyu.js"></script>
+  </body>
+</html>
