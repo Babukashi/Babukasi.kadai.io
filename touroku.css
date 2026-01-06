@@ -1,94 +1,76 @@
-/* touroku.css - 全体の基本デザイン */
 body {
-  background-color: #f0f2f5; /* ログイン画面と同じ薄いグレー */
-  font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-height: 100vh;
+  justify-content: center;
+  height: 100vh;
   margin: 0;
-  padding-top: 50px;
+  position: relative;
 }
 
-/* 中央の白いコンテナ */
-.registration-container,
-.form-box {
-  background-color: #ffffff;
-  border-radius: 25px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); /* ログイン画面風の影 */
-  padding: 40px;
-  width: 90%;
-  max-width: 450px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  box-sizing: border-box;
+/* 左上の戻るボタン */
+.back-button {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  padding: 5px 25px;
+  border: 2px solid #000;
+  border-radius: 20px;
+  background: #fff;
+  cursor: pointer;
+  font-size: 1.1rem;
 }
 
 h1 {
-  font-size: 1.8rem;
-  margin-bottom: 30px;
-  color: #000;
-  font-weight: bold;
+  font-size: 3rem;
+  margin-bottom: 20px;
+  font-weight: normal;
 }
 
-/* 入力グループ */
+/* フォームを囲む太い枠 */
+.form-box {
+  border: 3px solid #000;
+  border-radius: 30px;
+  padding: 40px;
+  width: 600px;
+  background: #fff;
+}
+
 .input-group {
-  width: 100%;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
   text-align: left;
 }
 
 label {
   display: block;
-  font-weight: bold;
-  margin-bottom: 8px;
-  font-size: 1rem;
+  font-size: 1.5rem;
+  margin-bottom: 10px;
 }
 
-input,
-select {
+input {
   width: 100%;
-  padding: 12px;
-  border: 2px solid #000; /* ログイン画面の太枠を再現 */
-  border-radius: 10px;
-  font-size: 1rem;
-  box-sizing: border-box;
-  background-color: #f9f9f9;
-}
-
-input:focus {
-  background-color: #e8f0fe; /* ログイン画面の入力時の色 */
+  border: none;
+  border-bottom: 2px solid #000; /* 下線のみ */
+  font-size: 1.2rem;
+  padding: 10px 0;
   outline: none;
 }
 
-/* 丸角ボタン（中央寄せ） */
-.submit-button,
-.back-button {
+/* 登録ボタン */
+.submit-button {
+  margin-top: 30px;
+  padding: 10px 80px;
   border: 2px solid #000;
   border-radius: 30px;
-  background-color: #fff;
-  color: #000;
-  font-size: 1.1rem;
-  font-weight: bold;
-  padding: 12px 0;
-  width: 100%;
-  max-width: 300px;
+  background: #fff;
+  font-size: 1.2rem;
   cursor: pointer;
-  margin-top: 15px;
-  transition: all 0.2s;
 }
 
-.submit-button:hover,
-.back-button:hover {
-  background-color: #f0f0f0;
-}
-
-/* 戻るボタンを画面左上に置く場合 */
-.fixed-back {
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  width: auto;
-  padding: 5px 20px;
+.error-text {
+  color: red;
+  font-size: 0.9rem;
+  margin-top: 5px;
+  height: 1rem;
 }
