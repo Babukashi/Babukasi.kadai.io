@@ -1,76 +1,24 @@
 body {
-  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-family: sans-serif;
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
+  align-items: center;
   height: 100vh;
   margin: 0;
-  position: relative;
 }
-
-/* 左上の戻るボタン */
-.back-button {
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  padding: 5px 25px;
+.finish-container {
+  text-align: center;
+}
+h1 {
+  font-size: 3rem;
+  margin-bottom: 60px;
+  font-weight: normal;
+}
+.round-button {
+  padding: 12px 60px;
   border: 2px solid #000;
-  border-radius: 20px;
+  border-radius: 30px;
   background: #fff;
   cursor: pointer;
   font-size: 1.1rem;
-}
-
-h1 {
-  font-size: 3rem;
-  margin-bottom: 20px;
-  font-weight: normal;
-}
-
-/* フォームを囲む太い枠 */
-.form-box {
-  border: 3px solid #000;
-  border-radius: 30px;
-  padding: 40px;
-  width: 600px;
-  background: #fff;
-}
-
-.input-group {
-  margin-bottom: 30px;
-  text-align: left;
-}
-
-label {
-  display: block;
-  font-size: 1.5rem;
-  margin-bottom: 10px;
-}
-
-input {
-  width: 100%;
-  border: none;
-  border-bottom: 2px solid #000; /* 下線のみ */
-  font-size: 1.2rem;
-  padding: 10px 0;
-  outline: none;
-}
-
-/* 登録ボタン */
-.submit-button {
-  margin-top: 30px;
-  padding: 10px 80px;
-  border: 2px solid #000;
-  border-radius: 30px;
-  background: #fff;
-  font-size: 1.2rem;
-  cursor: pointer;
-}
-
-.error-text {
-  color: red;
-  font-size: 0.9rem;
-  margin-top: 5px;
-  height: 1rem;
 }
