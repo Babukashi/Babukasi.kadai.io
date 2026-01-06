@@ -23,19 +23,30 @@ body {
   position: relative; /* 戻るボタンの配置基準 */
 }
 
-/* 左上の戻るボタン */
+/* profile.css */
+
 .back-button {
   position: absolute;
-  top: 20px;
-  left: 20px;
+  top: 20px; /* 縦は前と同じ（20px）でゆとりを持たせる */
+  left: 10px; /* 横の幅を狭くして左端に寄せる */
+
+  /* テキスト設定 */
   text-decoration: none;
-  color: #007bff;
+  color: #000000; /* テキストは黒 */
   font-size: 14px;
   font-weight: bold;
+
+  /* 演出の無効化 */
+  padding: 0;
+  transition: none; /* アニメーションを完全にオフ */
 }
 
+/* ホバー（マウスを重ねたとき）の設定 */
 .back-button:hover {
-  text-decoration: underline;
+  text-decoration: none; /* 下線を引かない */
+  color: #000000; /* 色を変えない */
+  opacity: 1; /* 透けさせない */
+  cursor: pointer;
 }
 
 /* 内側の枠や線を消去 */
