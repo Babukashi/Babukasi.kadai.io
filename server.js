@@ -5,7 +5,7 @@ import { exists } from 'https://deno.land/std/fs/mod.ts';
 // --- データ保持 (サーバーを再起動するとリセットされます) ---
 let MOCK_USERS = [
   {
-    id: '2316871@mwu.jp',
+    id: '1234',
     passwordHash: 'password',
     name: '学生ユーザー',
     occupation: '大学生',

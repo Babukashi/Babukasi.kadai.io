@@ -1,5 +1,3 @@
-// home.js
-
 // 各ボタン要素の取得
 const btnTouroku = document.getElementById('btn-touroku');
 const btnKanri = document.getElementById('btn-kanri');
