@@ -1,25 +1,90 @@
-.view-text {
-  font-size: 1.2rem;
-  padding: 10px 0;
-  border-bottom: 2px solid #000;
-  min-height: 1.5rem;
-}
-h1 {
-  font-size: 3rem;
-  text-align: center;
-  margin-top: 50px;
-}
-
 /* profile.css */
-h1 {
-  text-align: center;
-  width: 100%;
+
+/* 全体背景と中央配置 */
+body {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  background-color: #f0f2f5; /* 薄いグレーの背景 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
 }
 
-.view-text {
-  font-size: 1.2rem;
-  padding: 10px 0;
-  border-bottom: 2px solid #000;
-  min-height: 1.5rem;
-  word-break: break-all; /* 長いIDが枠を突き抜けないように */
+/* 一番外側の枠（カード） */
+.container {
+  background-color: #ffffff;
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+  position: relative; /* 戻るボタンの配置基準 */
+}
+
+/* 左上の戻るボタン */
+.back-button {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  text-decoration: none;
+  color: #007bff;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.back-button:hover {
+  text-decoration: underline;
+}
+
+/* 内側の枠や線を消去 */
+.profile-content,
+form {
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+
+h2 {
+  color: #333;
+  margin-bottom: 25px;
+}
+
+/* プロフィール項目（ラベルと値） */
+.info-group {
+  text-align: left;
+  margin-bottom: 15px;
+}
+
+.info-group label {
+  display: block;
+  font-size: 12px;
+  color: #666;
+  margin-bottom: 5px;
+}
+
+.info-group p {
+  margin: 0;
+  padding: 10px;
+  background-color: #f8f9fa;
+  border-radius: 6px;
+  color: #333;
+}
+
+/* 編集ボタンなど */
+button {
+  width: 100%;
+  padding: 12px;
+  background-color: #28a745; /* プロフィールは安心感のある緑系 */
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-top: 20px;
+}
+
+button:hover {
+  background-color: #218838;
 }
