@@ -34,7 +34,7 @@ async function handler(request) {
     if (pathname === '/api/login') {
       console.log('--- ログイン試行 ---');
       console.log('届いたID:', body.id);
-      console.log('届いたPW:', body.password); // ここで打ち間違いを確認できます
+      console.log('届いたPW:', body.password);
 
       const user = MOCK_USERS.find((u) => u.id === body.id && u.passwordHash === body.password);
       if (user) {
