@@ -80,7 +80,6 @@ const handler = async (request) => {
     // 全データ取得
     if (pathname === '/api/bookmarks') return jsonResponse(BOOKMARKS);
 
-    // ★追加：1件分のデータ（詳細）を取得するAPI
     if (pathname === '/api/bookmark') {
       const id = parseInt(url.searchParams.get('id')); // URLからIDを取得
       const item = BOOKMARKS.find((b) => b.id === id); // IDが一致するものを探す
