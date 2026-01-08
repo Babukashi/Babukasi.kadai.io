@@ -7,9 +7,9 @@ let MOCK_USERS = [
   {
     id: '1234',
     passwordHash: 'password',
-    name: '学生ユーザー',
-    occupation: '大学生',
-    gender: '女'
+    name: 'ユーザー',
+    occupation: '未選択',
+    gender: '未選択'
   }
 ];
 let BOOKMARKS = [];
