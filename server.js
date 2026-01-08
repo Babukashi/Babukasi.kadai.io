@@ -14,6 +14,9 @@ let MOCK_USERS = [
 ];
 let BOOKMARKS = [];
 
+// ★追加：現在ログインしているユーザーの情報を保持する変数
+let currentUser = null;
+
 // レスポンスを生成する共通関数
 function jsonResponse(data, status = 200) {
   return new Response(JSON.stringify(data), {
@@ -33,12 +36,11 @@ async function handler(request) {
     // 1. ログイン
     if (pathname === '/api/login') {
       console.log('--- ログイン試行 ---');
-      console.log('届いたID:', body.id);
-      console.log('届いたPW:', body.password);
-
       const user = MOCK_USERS.find((u) => u.id === body.id && u.passwordHash === body.password);
+
       if (user) {
         console.log('結果: 成功');
+        currentUser = user; // ★修正：ログインに成功したユーザー情報を保持する
         return jsonResponse({ message: 'OK' });
       } else {
         console.log('結果: 失敗 (一致するユーザーがいません)');
@@ -51,13 +53,14 @@ async function handler(request) {
       if (MOCK_USERS.find((u) => u.id === body.id)) {
         return jsonResponse({ message: 'このIDは既に使われています' }, 400);
       }
-      MOCK_USERS.push({
+      const newUser = {
         id: body.id,
         passwordHash: body.password,
         name: '新規ユーザー',
         occupation: '未設定',
         gender: '未設定'
-      });
+      };
+      MOCK_USERS.push(newUser);
       return jsonResponse({ message: 'OK' });
     }
 
@@ -82,24 +85,35 @@ async function handler(request) {
 
     // 6. プロフィール基本情報更新
     if (pathname === '/api/update-profile') {
-      // 簡易的に最初のユーザーを更新
-      MOCK_USERS[0] = { ...MOCK_USERS[0], ...body };
-      return jsonResponse({ message: 'OK' });
+      // ★修正：ログイン中のユーザー(currentUser)の情報を更新する
+      if (currentUser) {
+        Object.assign(currentUser, body);
+        return jsonResponse({ message: 'OK' });
+      }
+      return jsonResponse({ message: 'ログインが必要です' }, 401);
     }
 
     // 7. ID・パスワードの変更
     if (pathname === '/api/update-auth') {
-      MOCK_USERS[0].id = body.id;
-      MOCK_USERS[0].passwordHash = body.password;
-      console.log('認証情報が変更されました:', MOCK_USERS[0]);
-      return jsonResponse({ message: 'OK' });
+      // ★修正：ログイン中のユーザー(currentUser)の認証情報を更新する
+      if (currentUser) {
+        currentUser.id = body.id;
+        currentUser.passwordHash = body.password;
+        console.log('認証情報が変更されました:', currentUser);
+        return jsonResponse({ message: 'OK' });
+      }
+      return jsonResponse({ message: 'ログインが必要です' }, 401);
     }
   }
 
   // --- GET (ファイル提供 & データ取得) ---
   if (request.method === 'GET') {
     // データ取得系API
-    if (pathname === '/api/user-profile') return jsonResponse(MOCK_USERS[0]);
+    if (pathname === '/api/user-profile') {
+      // ★修正：固定のMOCK_USERS[0]ではなく、ログイン中のユーザー情報を返す
+      return jsonResponse(currentUser || {});
+    }
+
     if (pathname === '/api/bookmarks') return jsonResponse(BOOKMARKS);
     if (pathname === '/api/bookmark') {
       const id = parseInt(url.searchParams.get('id'));
@@ -122,7 +136,6 @@ async function handler(request) {
 
 console.log('------------------------------------------');
 console.log('サーバーを起動しました: http://localhost:8000');
-console.log('ログインできないときは、この画面に表示されるパスワードを確認してください');
 console.log('------------------------------------------');
 
 serve(handler, { port: 8000, hostname: '0.0.0.0' });
