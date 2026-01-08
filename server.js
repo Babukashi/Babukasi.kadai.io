@@ -13,7 +13,6 @@ let MOCK_USERS = [
 let BOOKMARKS = [];
 let currentUser = null;
 
-// レスポンスを生成する共通関数
 function jsonResponse(data, status = 200) {
   return new Response(JSON.stringify(data), {
     status,
@@ -21,7 +20,6 @@ function jsonResponse(data, status = 200) {
   });
 }
 
-// メインハンドラー
 const handler = async (request) => {
   const url = new URL(request.url);
   const pathname = url.pathname;
@@ -59,6 +57,12 @@ const handler = async (request) => {
       return jsonResponse({ message: 'OK' });
     }
 
+    // ブックマーク削除
+    if (pathname === '/api/delete-bookmark') {
+      BOOKMARKS = BOOKMARKS.filter((b) => b.id !== body.id);
+      return jsonResponse({ message: 'OK' });
+    }
+
     if (pathname === '/api/update-profile') {
       if (currentUser) {
         Object.assign(currentUser, body);
@@ -66,19 +70,29 @@ const handler = async (request) => {
       }
       return jsonResponse({ message: 'ログインが必要です' }, 401);
     }
-
-    // その他のPOST処理（ブックマーク更新・削除など）も同様に記述可能
   }
 
   // --- GET (ファイル提供 & データ取得) ---
   if (request.method === 'GET') {
+    // ユーザー情報取得
     if (pathname === '/api/user-profile') return jsonResponse(currentUser || {});
+
+    // 全データ取得
     if (pathname === '/api/bookmarks') return jsonResponse(BOOKMARKS);
 
-    // 静的ファイル提供処理
-    // Deno Deploy環境ではカレントディレクトリからの相対パスでファイルを読み込みます
-    let filePath = pathname === '/' ? './login.html' : `.${pathname}`;
+    // ★追加：1件分のデータ（詳細）を取得するAPI
+    if (pathname === '/api/bookmark') {
+      const id = parseInt(url.searchParams.get('id')); // URLからIDを取得
+      const item = BOOKMARKS.find((b) => b.id === id); // IDが一致するものを探す
+      if (item) {
+        return jsonResponse(item);
+      } else {
+        return jsonResponse({ message: 'データが見つかりません' }, 404);
+      }
+    }
 
+    // 静的ファイル提供
+    let filePath = pathname === '/' ? './login.html' : `.${pathname}`;
     try {
       const content = await Deno.readFile(filePath);
       const ext = extname(filePath);
