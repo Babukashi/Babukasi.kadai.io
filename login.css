@@ -1,4 +1,3 @@
-/* login.css */
 body {
   font-family: 'Helvetica Neue', Arial, sans-serif;
   display: flex;
@@ -6,16 +5,16 @@ body {
   align-items: center;
   height: 100vh;
   margin: 0;
-  background-color: #ffffff; /* 背景を白に変更 */
+  background-color: #ffffff;
 }
 
 .login-container {
   text-align: center;
-  width: 320px; /* signup.cssに合わせた幅 */
+  width: 320px;
 }
 
 h1 {
-  font-size: 2.5rem; /* signup.cssに合わせたサイズ */
+  font-size: 2.5rem;
   margin-bottom: 50px;
   font-weight: normal;
 }
@@ -34,7 +33,7 @@ label {
 input {
   width: 100%;
   border: none;
-  border-bottom: 2px solid #000; /* 下線のみのデザインに変更 */
+  border-bottom: 2px solid #000;
   padding: 10px 0;
   font-size: 1rem;
   outline: none;
@@ -50,10 +49,10 @@ input {
   font-size: 1rem;
   background-color: #fff;
   border: 2px solid #000;
-  border-radius: 25px; /* 丸いボタン */
+  border-radius: 25px;
   cursor: pointer;
   transition: 0.3s;
-  width: auto; /* 幅を自動に調整 */
+  width: auto;
   font-weight: normal;
   color: #000;
 }

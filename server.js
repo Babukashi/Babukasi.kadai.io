@@ -14,7 +14,6 @@ let MOCK_USERS = [
 ];
 let BOOKMARKS = [];
 
-// ★追加：現在ログインしているユーザーの情報を保持する変数
 let currentUser = null;
 
 // レスポンスを生成する共通関数
@@ -40,7 +39,7 @@ async function handler(request) {
 
       if (user) {
         console.log('結果: 成功');
-        currentUser = user; // ★修正：ログインに成功したユーザー情報を保持する
+        currentUser = user;
         return jsonResponse({ message: 'OK' });
       } else {
         console.log('結果: 失敗 (一致するユーザーがいません)');
@@ -85,7 +84,6 @@ async function handler(request) {
 
     // 6. プロフィール基本情報更新
     if (pathname === '/api/update-profile') {
-      // ★修正：ログイン中のユーザー(currentUser)の情報を更新する
       if (currentUser) {
         Object.assign(currentUser, body);
         return jsonResponse({ message: 'OK' });
@@ -95,7 +93,6 @@ async function handler(request) {
 
     // 7. ID・パスワードの変更
     if (pathname === '/api/update-auth') {
-      // ★修正：ログイン中のユーザー(currentUser)の認証情報を更新する
       if (currentUser) {
         currentUser.id = body.id;
         currentUser.passwordHash = body.password;
@@ -110,7 +107,6 @@ async function handler(request) {
   if (request.method === 'GET') {
     // データ取得系API
     if (pathname === '/api/user-profile') {
-      // ★修正：固定のMOCK_USERS[0]ではなく、ログイン中のユーザー情報を返す
       return jsonResponse(currentUser || {});
     }
 
