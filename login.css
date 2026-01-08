@@ -1,82 +1,71 @@
+/* login.css */
 body {
-  font-family: sans-serif;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
-  background-color: #f4f4f4;
+  height: 100vh;
   margin: 0;
+  background-color: #ffffff; /* 背景を白に変更 */
 }
 
 .login-container {
-  background: white;
-  padding: 40px;
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  width: 300px;
   text-align: center;
+  width: 320px; /* signup.cssに合わせた幅 */
 }
 
 h1 {
-  font-size: 1.5rem;
-  margin-bottom: 30px;
+  font-size: 2.5rem; /* signup.cssに合わせたサイズ */
+  margin-bottom: 50px;
+  font-weight: normal;
 }
 
 .input-group {
   text-align: left;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
 }
 
 label {
   display: block;
-  font-weight: bold;
+  font-size: 1.2rem;
   margin-bottom: 5px;
 }
 
-input[type='text'],
-input[type='password'] {
+input {
   width: 100%;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  box-sizing: border-box; /* paddingを含めた幅にする */
+  border: none;
+  border-bottom: 2px solid #000; /* 下線のみのデザインに変更 */
+  padding: 10px 0;
+  font-size: 1rem;
+  outline: none;
+  box-sizing: border-box;
 }
 
 /* ログイン・新規登録ボタンの共通スタイル */
 .login-button,
 .signup-button {
-  width: 100%;
-  padding: 12px;
-  margin-top: 15px;
-  border-radius: 25px;
+  display: inline-block;
+  margin-top: 30px;
+  padding: 10px 40px;
+  font-size: 1rem;
+  background-color: #fff;
+  border: 2px solid #000;
+  border-radius: 25px; /* 丸いボタン */
   cursor: pointer;
-  font-weight: bold;
-  transition: background-color 0.3s;
-}
-
-.login-button {
-  background-color: transparent;
-  border: 2px solid #000;
+  transition: 0.3s;
+  width: auto; /* 幅を自動に調整 */
+  font-weight: normal;
   color: #000;
 }
 
-.login-button:hover {
-  background-color: #eee;
-}
-
-.signup-button {
-  background-color: transparent;
-  border: 2px solid #000;
-  color: #000;
-}
-
+.login-button:hover,
 .signup-button:hover {
-  background-color: #eee;
+  background-color: #f0f0f0;
 }
 
 .error-message {
   color: red;
-  margin-top: 10px;
   font-size: 0.9rem;
-  height: 1.2rem; /* エラーがない場合も領域を確保 */
+  min-height: 1rem;
+  margin-top: 10px;
 }
