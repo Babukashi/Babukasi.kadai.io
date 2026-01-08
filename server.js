@@ -134,4 +134,4 @@ console.log('------------------------------------------');
 console.log('サーバーを起動しました: http://localhost:8000');
 console.log('------------------------------------------');
 
-serve(handler, { port: 8000, hostname: '0.0.0.0' });
+serve(handler, { hostname: '0.0.0.0' });
