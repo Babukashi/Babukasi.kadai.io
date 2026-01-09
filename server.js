@@ -60,8 +60,7 @@ const handler = async (request) => {
       BOOKMARKS.push({ id: Date.now(), ...body });
       return jsonResponse({ message: 'OK' });
     }
-
-    // ★追加：4. ブックマーク更新 (hensyu.jsから呼ばれる処理)
+    // 4. ブックマーク更新
     if (pathname === '/api/update-bookmark') {
       // 送られてきたIDに一致するデータのインデックスを探す
       const index = BOOKMARKS.findIndex((b) => b.id === body.id);
