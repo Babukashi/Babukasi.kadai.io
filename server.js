@@ -2,7 +2,7 @@ import { extname } from 'https://deno.land/std@0.207.0/path/mod.ts';
 import { exists } from 'https://deno.land/std@0.207.0/fs/mod.ts';
 
 // --- データ保存用ファイルの設定 ---
-const DATA_FILE = './data.json';
+const DATA_FILE = "./data.json";
 
 // --- データ初期状態 ---
 let MOCK_USERS = [
@@ -15,7 +15,7 @@ let MOCK_USERS = [
   }
 ];
 let BOOKMARKS = [];
-let currentUser = null;
+let currentUser = null; // 現在ログイン中のユーザー
 
 // --- データをファイルから読み込む関数 ---
 async function loadData() {
@@ -23,11 +23,11 @@ async function loadData() {
     try {
       const content = await Deno.readTextFile(DATA_FILE);
       const data = JSON.parse(content);
-      MOCK_USERS = data.users || MOCK_USERS;
-      BOOKMARKS = data.bookmarks || BOOKMARKS;
-      console.log('データを読み込みました');
+      if (data.users) MOCK_USERS = data.users;
+      if (data.bookmarks) BOOKMARKS = data.bookmarks;
+      console.log("✅ データを読み込みました");
     } catch (e) {
-      console.error('データの読み込みに失敗しました:', e);
+      console.error("❌ データの読み込みに失敗しました:", e);
     }
   }
 }
@@ -37,9 +37,9 @@ async function saveData() {
   try {
     const data = { users: MOCK_USERS, bookmarks: BOOKMARKS };
     await Deno.writeTextFile(DATA_FILE, JSON.stringify(data, null, 2));
-    console.log('データを保存しました');
+    console.log("💾 データを保存しました");
   } catch (e) {
-    console.error('データの保存に失敗しました:', e);
+    console.error("❌ データの保存に失敗しました:", e);
   }
 }
 
@@ -66,7 +66,7 @@ const handler = async (request) => {
     if (pathname === '/api/login') {
       const user = MOCK_USERS.find((u) => u.id === body.id && u.passwordHash === body.password);
       if (user) {
-        currentUser = user;
+        currentUser = user; // ログイン状態にする
         return jsonResponse({ message: 'OK' });
       }
       return jsonResponse({ message: 'IDまたはパスワードが違います' }, 401);
@@ -85,23 +85,24 @@ const handler = async (request) => {
         gender: '未設定'
       };
       MOCK_USERS.push(newUser);
-      await saveData(); // 保存
+      currentUser = newUser; // 登録と同時にログイン状態にする
+      await saveData();
       return jsonResponse({ message: 'OK' });
     }
 
     // 3. ブックマーク追加
     if (pathname === '/api/add-bookmark') {
       BOOKMARKS.push({ id: Date.now(), ...body });
-      await saveData(); // 保存
+      await saveData();
       return jsonResponse({ message: 'OK' });
     }
 
-    // 4. ブックマーク更新
+    // 4. ブックマーク更新 (hensyu.js用)
     if (pathname === '/api/update-bookmark') {
       const index = BOOKMARKS.findIndex((b) => b.id === body.id);
       if (index !== -1) {
         BOOKMARKS[index] = { ...BOOKMARKS[index], ...body };
-        await saveData(); // 保存
+        await saveData();
         return jsonResponse({ message: 'OK' });
       }
       return jsonResponse({ message: '更新対象が見つかりません' }, 404);
@@ -110,7 +111,7 @@ const handler = async (request) => {
     // 5. ブックマーク削除
     if (pathname === '/api/delete-bookmark') {
       BOOKMARKS = BOOKMARKS.filter((b) => b.id !== body.id);
-      await saveData(); // 保存
+      await saveData();
       return jsonResponse({ message: 'OK' });
     }
 
@@ -118,7 +119,8 @@ const handler = async (request) => {
     if (pathname === '/api/update-profile') {
       if (currentUser) {
         Object.assign(currentUser, body);
-        await saveData(); // 保存
+        // MOCK_USERSの中身も連動して更新される
+        await saveData();
         return jsonResponse({ message: 'OK' });
       }
       return jsonResponse({ message: 'ログインが必要です' }, 401);
@@ -127,8 +129,15 @@ const handler = async (request) => {
 
   // --- GET (ファイル提供 & データ取得) ---
   if (request.method === 'GET') {
-    if (pathname === '/api/user-profile') return jsonResponse(currentUser || {});
+    // ユーザー情報取得 (修正ポイント：currentUserがいなければ最初のユーザーを返す)
+    if (pathname === '/api/user-profile') {
+      return jsonResponse(currentUser || MOCK_USERS[0]);
+    }
+
+    // 全ブックマーク取得
     if (pathname === '/api/bookmarks') return jsonResponse(BOOKMARKS);
+
+    // 単一ブックマーク取得
     if (pathname === '/api/bookmark') {
       const id = parseInt(url.searchParams.get('id'));
       const item = BOOKMARKS.find((b) => b.id === id);
@@ -143,7 +152,7 @@ const handler = async (request) => {
       const mimeTypes = {
         '.html': 'text/html; charset=UTF-8',
         '.css': 'text/css',
-        '.js': 'text/javascript'
+        '.js': 'text/javascript',
       };
       return new Response(content, { headers: { 'Content-Type': mimeTypes[ext] || 'text/plain' } });
     } catch {
