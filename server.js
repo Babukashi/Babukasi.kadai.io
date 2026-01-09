@@ -1,6 +1,10 @@
 import { extname } from 'https://deno.land/std@0.207.0/path/mod.ts';
+import { exists } from 'https://deno.land/std@0.207.0/fs/mod.ts';
 
-// --- データ保持 (サーバー再起動でリセット) ---
+// --- データ保存用ファイルの設定 ---
+const DATA_FILE = './data.json';
+
+// --- データ初期状態 ---
 let MOCK_USERS = [
   {
     id: '1234',
@@ -12,6 +16,35 @@ let MOCK_USERS = [
 ];
 let BOOKMARKS = [];
 let currentUser = null;
+
+// --- データをファイルから読み込む関数 ---
+async function loadData() {
+  if (await exists(DATA_FILE)) {
+    try {
+      const content = await Deno.readTextFile(DATA_FILE);
+      const data = JSON.parse(content);
+      MOCK_USERS = data.users || MOCK_USERS;
+      BOOKMARKS = data.bookmarks || BOOKMARKS;
+      console.log('データを読み込みました');
+    } catch (e) {
+      console.error('データの読み込みに失敗しました:', e);
+    }
+  }
+}
+
+// --- データをファイルに保存する関数 ---
+async function saveData() {
+  try {
+    const data = { users: MOCK_USERS, bookmarks: BOOKMARKS };
+    await Deno.writeTextFile(DATA_FILE, JSON.stringify(data, null, 2));
+    console.log('データを保存しました');
+  } catch (e) {
+    console.error('データの保存に失敗しました:', e);
+  }
+}
+
+// 起動時にデータを読み込む
+await loadData();
 
 // レスポンスを生成する共通関数
 function jsonResponse(data, status = 200) {
@@ -52,21 +85,23 @@ const handler = async (request) => {
         gender: '未設定'
       };
       MOCK_USERS.push(newUser);
+      await saveData(); // 保存
       return jsonResponse({ message: 'OK' });
     }
 
     // 3. ブックマーク追加
     if (pathname === '/api/add-bookmark') {
       BOOKMARKS.push({ id: Date.now(), ...body });
+      await saveData(); // 保存
       return jsonResponse({ message: 'OK' });
     }
+
     // 4. ブックマーク更新
     if (pathname === '/api/update-bookmark') {
-      // 送られてきたIDに一致するデータのインデックスを探す
       const index = BOOKMARKS.findIndex((b) => b.id === body.id);
       if (index !== -1) {
-        // 既存のデータ(BOOKMARKS[index])を、新しい内容(body)で上書き
         BOOKMARKS[index] = { ...BOOKMARKS[index], ...body };
+        await saveData(); // 保存
         return jsonResponse({ message: 'OK' });
       }
       return jsonResponse({ message: '更新対象が見つかりません' }, 404);
@@ -75,6 +110,7 @@ const handler = async (request) => {
     // 5. ブックマーク削除
     if (pathname === '/api/delete-bookmark') {
       BOOKMARKS = BOOKMARKS.filter((b) => b.id !== body.id);
+      await saveData(); // 保存
       return jsonResponse({ message: 'OK' });
     }
 
@@ -82,6 +118,7 @@ const handler = async (request) => {
     if (pathname === '/api/update-profile') {
       if (currentUser) {
         Object.assign(currentUser, body);
+        await saveData(); // 保存
         return jsonResponse({ message: 'OK' });
       }
       return jsonResponse({ message: 'ログインが必要です' }, 401);
@@ -90,20 +127,15 @@ const handler = async (request) => {
 
   // --- GET (ファイル提供 & データ取得) ---
   if (request.method === 'GET') {
-    // ユーザー情報取得
     if (pathname === '/api/user-profile') return jsonResponse(currentUser || {});
-
-    // 全ブックマーク取得
     if (pathname === '/api/bookmarks') return jsonResponse(BOOKMARKS);
-
-    // 単一ブックマーク取得 (詳細表示用)
     if (pathname === '/api/bookmark') {
       const id = parseInt(url.searchParams.get('id'));
       const item = BOOKMARKS.find((b) => b.id === id);
       return item ? jsonResponse(item) : jsonResponse({ message: 'Not Found' }, 404);
     }
 
-    // 静的ファイル提供 (HTML, CSS, JS)
+    // 静的ファイル提供
     let filePath = pathname === '/' ? './login.html' : `.${pathname}`;
     try {
       const content = await Deno.readFile(filePath);
